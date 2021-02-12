@@ -35,12 +35,7 @@ class BooksController extends Controller
      */
     public function store(Request $request)
     {
-        $data = request()->validate([
-           'title'=> 'required|string|max:255',
-           'author'=>'required|string|max:255',
-        ]);
-
-        Book::create($data);
+        Book::create($this->validateRequest());
     }
 
     /**
@@ -74,12 +69,7 @@ class BooksController extends Controller
      */
     public function update(Book $book)
     {
-        $data = request()->validate([
-            'title' => 'required|string|max:255',
-            'author' => 'required|string|max:255',
-        ]);
-
-        $book->update($data);  //here i am saying $book go and update yourself with new data
+        $book->update($this->validateRequest());  //here i am saying $book go and update yourself with new data
 
     }
 
@@ -92,5 +82,16 @@ class BooksController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    /**
+     * @return array
+     */
+    public function validateRequest(): array
+    {
+        return request()->validate([
+            'title' => 'required|string|max:255',
+            'author' => 'required|string|max:255',
+        ]);
     }
 }
