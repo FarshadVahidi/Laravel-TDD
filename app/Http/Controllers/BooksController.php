@@ -72,9 +72,15 @@ class BooksController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Book $book)
     {
-        //
+        $data = request()->validate([
+            'title' => 'required|string|max:255',
+            'author' => 'required|string|max:255',
+        ]);
+
+        $book->update($data);  //here i am saying $book go and update yourself with new data
+
     }
 
     /**
