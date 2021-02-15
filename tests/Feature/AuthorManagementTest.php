@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Author;
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -21,6 +22,9 @@ class AuthorManagementTest extends TestCase
             'dob' => '05/14/1988',
         ]);
 
-        $this->assertCount(1, Author::all());
+        $author = Author::all();
+
+        $this->assertCount(1, $author);
+        $this->assertInstanceOf(Carbon::class, $author->first()->dob);
     }
 }
