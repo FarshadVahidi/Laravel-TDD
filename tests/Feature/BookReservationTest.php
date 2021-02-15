@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Author;
 use App\Models\Book;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -91,5 +92,20 @@ class BookReservationTest extends TestCase
         $this->assertCount(0, Book::all());
         $response->assertRedirect('/books');
 
+    }
+
+    /** @test */
+    public function a_new_author_is_automatically_added()
+    {
+        $this->post('/books', [
+            'title' => 'Cool Title',
+            'author' => 'Victor',
+        ]);
+
+        $book = Book::first();
+        $author = Author::first();
+
+        $this->assertEquals($author->id, $book->author_id);
+        $this->assertCount(1, Author::all());
     }
 }
