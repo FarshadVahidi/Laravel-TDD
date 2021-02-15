@@ -96,8 +96,8 @@ class BooksController extends Controller
     public function validateRequest(): array
     {
         return request()->validate([
-            'title' => 'required|string|max:255',
-            'author' => 'required|string|max:255',
+            'title' => 'required',
+            'author_id' => 'required',
         ]);
     }
 }
