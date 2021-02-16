@@ -14,6 +14,11 @@ class CheckinBookController extends Controller
 
     public function store(Book $book)
     {
-        $book->checkin(auth()->user());
+        try{
+            $book->checkin(auth()->user());
+        }catch(\Exception $e){
+            return response([], 404);
+        }
+
     }
 }
