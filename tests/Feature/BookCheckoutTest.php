@@ -51,4 +51,25 @@ class BookCheckoutTest extends TestCase
 
         $this->assertCount(0, Reservation::all());
     }
+
+
+    /** @test */
+    public function a_book_can_be_checked_in_by_a_signed_in_user()
+    {
+
+        $this->withoutExceptionHandling();
+
+        //these tre lines are setup lines
+        $book = Book::factory()->create();
+        $user = User::factory()->create();
+        $this->actingAs($user)->post('/checkout/' .$book->id);
+
+        $this->actingAs($user)->post('/checkin/' . $book->id);
+
+        $this->assertCount(1, Reservation::all());
+        $this->assertEquals($user->id, Reservation::first()->user_id);
+        $this->assertEquals($book->id, Reservation::first()->book_id);
+        $this->assertEquals(now(), Reservation::first()->checked_out_at);
+        $this->assertEquals(now(), Reservation::first()->checked_in_at);
+    }
 }
