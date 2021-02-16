@@ -41,4 +41,14 @@ class BookCheckoutTest extends TestCase
 
         $this->assertCount(0, Reservation::all());
     }
+
+    /** @test */
+    public function only_real_books_can_be_checked_out()
+    {
+        $this->actingAs($user = User::factory()->create())
+            ->post('/checkout/123')
+            ->assertStatus(404);
+
+        $this->assertCount(0, Reservation::all());
+    }
 }
