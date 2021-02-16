@@ -6,6 +6,7 @@ use App\Models\Book;
 use App\Models\Reservation;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Auth;
 use Tests\TestCase;
 
 class BookCheckoutTest extends TestCase
@@ -71,5 +72,23 @@ class BookCheckoutTest extends TestCase
         $this->assertEquals($book->id, Reservation::first()->book_id);
         $this->assertEquals(now(), Reservation::first()->checked_out_at);
         $this->assertEquals(now(), Reservation::first()->checked_in_at);
+    }
+
+    /** @test */
+    public function only_signed_in_users_can_checkin_a_book()
+    {
+//        $this->withoutExceptionHandling();
+
+        //these tre line are just setup for post checkin route
+        $book = Book::factory()->create();
+        $this->actingAs(User::factory()->create())
+            ->post('/checkout/' .$book->id);
+        Auth::logout();
+
+        $this->post('/checkin/' .$book->id)
+            ->assertRedirect('/login');
+
+        $this->assertCount(1, Reservation::all());
+        $this->assertNull(Reservation::first()->checked_in_at);
     }
 }
