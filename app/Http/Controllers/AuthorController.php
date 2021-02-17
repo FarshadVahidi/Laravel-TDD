@@ -35,12 +35,7 @@ class AuthorController extends Controller
      */
     public function store(Request $request)
     {
-        $data = request()->validate([
-            'name' => 'required',
-            'dob' => '',
-        ]);
-
-        Author::create($data);
+        Author::create($this->validateData());
     }
 
     /**
@@ -86,5 +81,16 @@ class AuthorController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    /**
+     * @return array
+     */
+    private function validateData(): array
+    {
+        return request()->validate([
+            'name' => 'required',
+            'dob' => 'required',
+        ]);
     }
 }
