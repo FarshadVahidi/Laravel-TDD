@@ -35,7 +35,7 @@ class AuthorController extends Controller
      */
     public function store(Request $request)
     {
-        Author::create($this->validateData());
+        Author::create($this->validateRequest());
     }
 
     /**
@@ -86,7 +86,7 @@ class AuthorController extends Controller
     /**
      * @return array
      */
-    private function validateData(): array
+    private function validateRequest(): array
     {
         return request()->validate([
             'name' => 'required',
